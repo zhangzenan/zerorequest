@@ -1,0 +1,32 @@
+syntax = "v1"
+
+type CommonResponse {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+	Success bool        `json:"success"`
+}
+
+type (
+	FocusRequest {
+		Id string `form:"id"` //Get传值
+	}
+	//轮播图
+	Focus {
+		Id    string `json:"id"`
+		Title string `json:"title"`
+		Image string `json:"image"`
+		Link  string `json:"link"`
+	}
+)
+
+service shop-api {
+	//获取轮播图
+	@handler GetFocus
+	get /api/focus returns (CommonResponse)
+
+	//获取一个轮播图
+	@handler GetFocusById
+	get /api/oneFocus (FocusRequest) returns (CommonResponse)
+}
+
