@@ -27,7 +27,15 @@ func NewGetFocusByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetF
 }
 
 func (l *GetFocusByIdLogic) GetFocusById(req *types.FocusRequest) (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	logx.Info("GetFocusById", req.Id)
+	return &types.CommonResponse{
+		Code:    200,
+		Message: "success",
+		Data: types.Focus{
+			Id:    "1",
+			Title: "标题1",
+			Image: "https://img.alicdn.com/imgextra/i2/",
+			Link:  "https://www.baidu.com",
+		},
+	}, nil
 }

@@ -3,6 +3,28 @@
 
 package types
 
+type AddFocusRequest struct {
+	Title string `form:"title"`
+	Image string `form:"image"`
+	Link  string `form:"link"`
+}
+
+type AddUserRequest struct {
+	Name string `form:"name"`
+	Age  int    `form:"age,default=18"` //默认值
+	Sex  int    `form:"sex,option=1|2"` //选项,枚举值
+}
+
+type Article struct {
+	Id      string `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+type ArticleRequest struct {
+	Id string `path:"id"` //动态路由
+}
+
 type CommonResponse struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
@@ -19,4 +41,18 @@ type Focus struct {
 
 type FocusRequest struct {
 	Id string `form:"id"` //Get传值
+}
+
+type UpdateFocusRequest struct {
+	Id    string `form:"id"`
+	Title string `form:"title"`
+	Image string `form:"image"`
+	Link  string `form:"link"`
+}
+
+type User struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+	Sex  int    `json:"sex"`
 }

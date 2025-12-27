@@ -15,6 +15,26 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodPost,
+				Path:    "/api/addFocus",
+				Handler: AddFocusHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/api/addUser",
+				Handler: AddUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/api/article/:id",
+				Handler: GetArticleByIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodDelete,
+				Path:    "/api/deleteFocus",
+				Handler: DeleteFocusHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodGet,
 				Path:    "/api/focus",
 				Handler: GetFocusHandler(serverCtx),
@@ -23,6 +43,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodGet,
 				Path:    "/api/oneFocus",
 				Handler: GetFocusByIdHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPut,
+				Path:    "/api/updateFocus",
+				Handler: UpdateFocusHandler(serverCtx),
 			},
 		},
 	)
