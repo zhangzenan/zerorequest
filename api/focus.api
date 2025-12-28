@@ -1,0 +1,56 @@
+syntax = "v1"
+import "shop.api"
+type (
+    FocusRequest {
+        Id int `form:"id"` //Get传值
+    }
+        //添加轮播图
+    AddFocusRequest {
+        Title string `form:"title"`
+        Pic string `form:"pic"`
+        Link string `form:"link"`
+    }
+        //修改轮播图
+    UpdateFocusRequest {
+        Id int `form:"id"`
+        Title string `form:"title"`
+        Pic string `form:"pic"`
+        Link string `form:"link"`
+    }
+        //轮播图
+    Focus {
+        Id int `json:"id"`
+        Title string `json:"title"`
+        Pic string `json:"pic"`
+        Link string `json:"link"`
+    }
+)
+
+
+@server(
+    group: focus //代表当前service代码块下的路由生成代码时都会被放到focus目录下
+    prefix: /api/focus //前缀
+)
+service shop-api {
+    //获取轮播图
+    @doc "获取轮播图"
+    @handler GetFocus
+    get / returns (CommonResponse)
+
+    //获取一个轮播图
+    @doc "获取一个轮播图"
+    @handler GetFocusById
+    get /oneFocus (FocusRequest) returns (CommonResponse)
+
+    //增加轮播图
+    @handler AddFocus
+    post /addFocus (AddFocusRequest) returns (CommonResponse)
+
+    //修改轮播图
+    @handler UpdateFocus
+    put /updateFocus (UpdateFocusRequest) returns (CommonResponse)
+
+    //删除轮播图
+    @handler DeleteFocus
+    delete /deleteFocus (FocusRequest) returns (CommonResponse)
+}

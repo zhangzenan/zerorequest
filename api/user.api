@@ -1,0 +1,31 @@
+syntax = "v1"
+import "shop.api"
+type (
+    AddUserRequest {
+        Name string `form:"name"`
+        Age int `form:"age,default=18"` //默认值
+        Sex int `form:"sex,option=1|2"` //选项,枚举值
+    }
+    User {
+        Id string `json:"id"`
+        Name string `json:"name"`
+        Age int `json:"age"`
+        Sex int `json:"sex"`
+    }
+)
+
+
+
+@server(
+    group: user //代表当前service代码块下的路由生成代码时都会被放到user目录下
+    prefix: /api/user //前缀
+)
+service shop-api {
+    //增加用户
+    @handler AddUser
+    post /addUser (AddUserRequest) returns (CommonResponse)
+
+    //获取用户
+    @handler GetUser
+    get /getUser () returns (CommonResponse)
+}

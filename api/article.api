@@ -1,0 +1,26 @@
+syntax = "v1"
+import "shop.api"
+
+type (
+    //文章请求参数
+    ArticleRequest {
+        Id string `path:"id"` //动态路由
+    }
+        //文章
+    Article {
+        Id string `json:"id"`
+        Title string `json:"title"`
+        Content string `json:"content"`
+    }
+)
+
+
+@server(
+    group: article //代表当前service代码块下的路由生成代码时都会被放到article目录下
+    prefix: /api/article //前缀
+)
+service shop-api {
+    //获取一个文章
+    @handler GetArticleById
+    get /:id (ArticleRequest) returns (CommonResponse) //配置动态路由
+}

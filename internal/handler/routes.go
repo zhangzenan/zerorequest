@@ -6,6 +6,9 @@ package handler
 import (
 	"net/http"
 
+	article "zerorequest/internal/handler/article"
+	focus "zerorequest/internal/handler/focus"
+	user "zerorequest/internal/handler/user"
 	"zerorequest/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -15,40 +18,60 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
-				Method:  http.MethodPost,
-				Path:    "/api/addFocus",
-				Handler: AddFocusHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodPost,
-				Path:    "/api/addUser",
-				Handler: AddUserHandler(serverCtx),
-			},
-			{
 				Method:  http.MethodGet,
-				Path:    "/api/article/:id",
-				Handler: GetArticleByIdHandler(serverCtx),
+				Path:    "/:id",
+				Handler: article.GetArticleByIdHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/article"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// 获取轮播图
+				Method:  http.MethodGet,
+				Path:    "/",
+				Handler: focus.GetFocusHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/addFocus",
+				Handler: focus.AddFocusHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodDelete,
-				Path:    "/api/deleteFocus",
-				Handler: DeleteFocusHandler(serverCtx),
+				Path:    "/deleteFocus",
+				Handler: focus.DeleteFocusHandler(serverCtx),
 			},
 			{
+				// 获取一个轮播图
 				Method:  http.MethodGet,
-				Path:    "/api/focus",
-				Handler: GetFocusHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/api/oneFocus",
-				Handler: GetFocusByIdHandler(serverCtx),
+				Path:    "/oneFocus",
+				Handler: focus.GetFocusByIdHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodPut,
-				Path:    "/api/updateFocus",
-				Handler: UpdateFocusHandler(serverCtx),
+				Path:    "/updateFocus",
+				Handler: focus.UpdateFocusHandler(serverCtx),
 			},
 		},
+		rest.WithPrefix("/api/focus"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/addUser",
+				Handler: user.AddUserHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/getUser",
+				Handler: user.GetUserHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/api/user"),
 	)
 }
