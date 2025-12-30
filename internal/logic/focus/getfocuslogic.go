@@ -5,6 +5,7 @@ package focus
 
 import (
 	"context"
+	"zerorequest/model/gorm"
 
 	"zerorequest/internal/svc"
 	"zerorequest/internal/types"
@@ -27,23 +28,13 @@ func NewGetFocusLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFocus
 }
 
 func (l *GetFocusLogic) GetFocus() (resp *types.CommonResponse, err error) {
+	//获取所有数据,定义一个切片
+	focus := []gorm.Focus{}
+	l.svcCtx.DB.Find(&focus)
 	return &types.CommonResponse{
 		Code:    200,
 		Message: "success",
 		Success: true,
-		Data: []types.Focus{
-			{
-				Id:    "1",
-				Title: "标题1",
-				Image: "https://img.alicdn.com/imgextra/i2/",
-				Link:  "https://www.baidu.com",
-			},
-			{
-				Id:    "2",
-				Title: "标题2",
-				Image: "https://img.alicdn.com/imgextra/i2/",
-				Link:  "https://www.baidu.com",
-			},
-		},
+		Data:    focus,
 	}, nil
 }
