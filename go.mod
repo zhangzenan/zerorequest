@@ -2,7 +2,11 @@ module zerorequest
 
 go 1.25.4
 
-require github.com/zeromicro/go-zero v1.9.3
+require (
+	github.com/zeromicro/go-zero v1.9.3
+	gorm.io/driver/mysql v1.6.0
+	gorm.io/gorm v1.31.1
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
@@ -51,6 +55,4 @@ require (
 	google.golang.org/grpc v1.65.0 // indirect
 	google.golang.org/protobuf v1.36.5 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/mysql v1.6.0 // indirect
-	gorm.io/gorm v1.31.1 // indirect
 )

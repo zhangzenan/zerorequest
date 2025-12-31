@@ -3,4 +3,4 @@ Host: 0.0.0.0
 Port: 8888
 
 Mysql:
-  DataSource: root:123.com@tcp(127.0.0.1:3306)/gozerogorm?charset=utf8mb4&parseTime=true&loc=Local
+  DataSource: root:123.com@tcp(127.0.0.1:3306)/recommend_db?charset=utf8mb4&parseTime=true&loc=Local
