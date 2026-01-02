@@ -6,12 +6,15 @@ package user
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"zerorequest/internal/logic/user"
 	"zerorequest/internal/svc"
+
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func GetUserHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+	logx.Info("执行GetUser111。。。")
 	return func(w http.ResponseWriter, r *http.Request) {
 		l := user.NewGetUserLogic(r.Context(), svcCtx)
 		resp, err := l.GetUser()

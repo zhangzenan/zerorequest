@@ -13,36 +13,38 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddUserLogic struct {
+type DeleteUserLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLogic {
-	return &AddUserLogic{
+func NewDeleteUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteUserLogic {
+	return &DeleteUserLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *AddUserLogic) AddUser(req *types.AddUserRequest) (resp *types.CommonResponse, err error) {
-	logx.Info("AddUser", req.Name, req.Age, req.Sex)
+func (l *DeleteUserLogic) DeleteUser(req *types.UserRequest) (resp *types.CommonResponse, err error) {
+	id := req.Id
 	user := gorm.User{
-		Name: req.Name,
-		Age:  req.Age,
-		Sex:  req.Sex,
+		Id: id,
 	}
-	err = l.svcCtx.DB.Create(&user).Error
+	err = l.svcCtx.DB.Delete(&user).Error
 	if err != nil {
 		return &types.CommonResponse{
 			Code:    500,
-			Message: "添加失败",
+			Data:    nil,
+			Message: "删除失败",
+			Success: false,
 		}, nil
 	}
 	return &types.CommonResponse{
 		Code:    200,
-		Message: "添加成功",
+		Data:    nil,
+		Message: "删除成功",
+		Success: true,
 	}, nil
 }

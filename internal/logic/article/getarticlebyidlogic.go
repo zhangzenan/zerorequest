@@ -34,7 +34,7 @@ func (l *GetArticleByIdLogic) GetArticleById(req *types.ArticleRequest) (resp *t
 		Message: "success",
 		Success: true,
 		Data: types.Article{
-			Id:      "1",
+			Id:      1,
 			Title:   "标题",
 			Content: "内容",
 		},

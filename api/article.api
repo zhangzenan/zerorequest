@@ -1,14 +1,13 @@
 syntax = "v1"
-import "shop.api"
 
 type (
     //文章请求参数
     ArticleRequest {
-        Id string `path:"id"` //动态路由
+        Id int `path:"id"` //动态路由
     }
         //文章
     Article {
-        Id string `json:"id"`
+        Id int `json:"id"`
         Title string `json:"title"`
         Content string `json:"content"`
     }

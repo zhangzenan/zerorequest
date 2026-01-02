@@ -27,15 +27,14 @@ func NewAddFocusLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddFocus
 }
 
 func (l *AddFocusLogic) AddFocus(req *types.AddFocusRequest) (resp *types.CommonResponse, err error) {
-	logx.Info("AddFocus", req.Title, req.Image, req.Link)
+	logx.Info("AddFocus", req.Title, req.Link)
 	return &types.CommonResponse{
 		Code:    200,
 		Message: "success",
 		Success: true,
 		Data: types.Focus{
-			Id:    "1",
+			Id:    1,
 			Title: req.Title,
-			Image: req.Image,
 			Link:  req.Link,
 		},
 	}, nil

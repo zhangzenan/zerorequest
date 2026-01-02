@@ -7,6 +7,6 @@ type CommonResponse {
 	Success bool        `json:"success"`
 }
 
-import "./api/focus.api"
 import "./api/user.api"
+import "./api/focus.api"
 import "./api/article.api"

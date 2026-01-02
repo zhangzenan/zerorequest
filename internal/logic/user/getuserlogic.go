@@ -5,9 +5,9 @@ package user
 
 import (
 	"context"
-
 	"zerorequest/internal/svc"
 	"zerorequest/internal/types"
+	"zerorequest/model/gorm"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,7 +27,15 @@ func NewGetUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUserLo
 }
 
 func (l *GetUserLogic) GetUser() (resp *types.CommonResponse, err error) {
-	// todo: add your logic here and delete this line
+	logx.Info("执行GetUser。。。")
+	user := []gorm.User{}
+	//l.svcCtx.DB.Debug().Find(&user)
 
-	return
+	//执行原生sql
+	l.svcCtx.DB.Raw("select * from user").Scan(&user)
+	return &types.CommonResponse{
+		Code:    200,
+		Message: "success",
+		Data:    user,
+	}, nil
 }

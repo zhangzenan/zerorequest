@@ -5,6 +5,7 @@ package focus
 
 import (
 	"context"
+	"zerorequest/model/gorm"
 
 	"zerorequest/internal/svc"
 	"zerorequest/internal/types"
@@ -28,14 +29,19 @@ func NewGetFocusByIdLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetF
 
 func (l *GetFocusByIdLogic) GetFocusById(req *types.FocusRequest) (resp *types.CommonResponse, err error) {
 	logx.Info("GetFocusById", req.Id)
+	id := req.Id
+	focus := gorm.Focus{}
+	err = l.svcCtx.DB.Where("id = ?", id).First(&focus).Error
+	if err != nil {
+		return &types.CommonResponse{
+			Code:    500,
+			Message: "轮播图不存在",
+			Success: false,
+		}, nil
+	}
 	return &types.CommonResponse{
 		Code:    200,
 		Message: "success",
-		Data: types.Focus{
-			Id:    "1",
-			Title: "标题1",
-			Image: "https://img.alicdn.com/imgextra/i2/",
-			Link:  "https://www.baidu.com",
-		},
+		Data:    focus,
 	}, nil
 }

@@ -5,7 +5,7 @@ package types
 
 type AddFocusRequest struct {
 	Title string `form:"title"`
-	Image string `form:"image"`
+	Pic   string `form:"pic"`
 	Link  string `form:"link"`
 }
 
@@ -16,13 +16,13 @@ type AddUserRequest struct {
 }
 
 type Article struct {
-	Id      string `json:"id"`
+	Id      int    `json:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 }
 
 type ArticleRequest struct {
-	Id string `path:"id"` //动态路由
+	Id int `path:"id"` //动态路由
 }
 
 type CommonResponse struct {
@@ -33,26 +33,30 @@ type CommonResponse struct {
 }
 
 type Focus struct {
-	Id    string `json:"id"`
+	Id    int    `json:"id"`
 	Title string `json:"title"`
-	Image string `json:"image"`
+	Pic   string `json:"pic"`
 	Link  string `json:"link"`
 }
 
 type FocusRequest struct {
-	Id string `form:"id"` //Get传值
+	Id int `form:"id"` //Get传值
 }
 
 type UpdateFocusRequest struct {
-	Id    string `form:"id"`
+	Id    int    `form:"id"`
 	Title string `form:"title"`
-	Image string `form:"image"`
+	Pic   string `form:"pic"`
 	Link  string `form:"link"`
 }
 
-type User struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-	Sex  int    `json:"sex"`
+type UpdateUserRequest struct {
+	Id   int    `json:"id"`
+	Name string `form:"name"`
+	Age  int    `form:"age,default=18"` //默认值
+	Sex  int    `form:"sex,option=1|2"` //选项,枚举值
+}
+
+type UserRequest struct {
+	Id int `json:"id"`
 }

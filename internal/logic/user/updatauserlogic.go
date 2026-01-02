@@ -13,36 +13,36 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddUserLogic struct {
+type UpdataUserLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewAddUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddUserLogic {
-	return &AddUserLogic{
+func NewUpdataUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdataUserLogic {
+	return &UpdataUserLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *AddUserLogic) AddUser(req *types.AddUserRequest) (resp *types.CommonResponse, err error) {
-	logx.Info("AddUser", req.Name, req.Age, req.Sex)
+func (l *UpdataUserLogic) UpdataUser(req *types.UpdateUserRequest) (resp *types.CommonResponse, err error) {
 	user := gorm.User{
+		Id:   req.Id,
 		Name: req.Name,
 		Age:  req.Age,
 		Sex:  req.Sex,
 	}
-	err = l.svcCtx.DB.Create(&user).Error
+	err = l.svcCtx.DB.Model(&gorm.User{}).Where("id = ?", req.Id).Updates(&user).Error
 	if err != nil {
 		return &types.CommonResponse{
 			Code:    500,
-			Message: "添加失败",
+			Message: "更新失败",
 		}, nil
 	}
 	return &types.CommonResponse{
 		Code:    200,
-		Message: "添加成功",
+		Message: "更新成功",
 	}, nil
 }

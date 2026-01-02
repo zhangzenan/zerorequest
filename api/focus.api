@@ -1,5 +1,4 @@
 syntax = "v1"
-import "shop.api"
 type (
     FocusRequest {
         Id int `form:"id"` //Get传值
