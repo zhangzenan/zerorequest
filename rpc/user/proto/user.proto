@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = ".;pb";
+
+import "google/protobuf/timestamp.proto";
+
+enum Sex{
+  MALE = 0;
+  FEMALE = 1;
+}
+
+// 用户信息,后面的值是这个字段的标识位
+message UserMsg{
+  string name = 1;
+  uint32 age = 2;
+  Sex sex = 3;
+  google.protobuf.Timestamp birthday = 4;
+  repeated string hobby = 5;
+  //string address = 6;
+  //string email = 7;
+  reserved 6;//保留字段，说明这个字段之前是被使用过的，但是被删除了
+  reserved "email";
+}
+
+message Response{
+  bool ok = 1;
+}
+
+service UserService{
+  rpc AddUser(UserMsg) returns (Response);
+}
