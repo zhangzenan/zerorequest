@@ -48,6 +48,12 @@ func (m *JwtAuthMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
 			httpx.Error(w, errorx.NewCodeError(401, "Invalid token"))
 			return
 		}
+		if token == nil || !token.Valid {
+			httpx.Error(w, errorx.NewCodeError(401, "Invalid token"))
+			return
+		}
+
+		next(w, r)
 	}
 
 }
