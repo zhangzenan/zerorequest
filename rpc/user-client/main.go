@@ -56,7 +56,7 @@ func main() {
 
 func discoverService() *model.Instance {
 	sc := []constant.ServerConfig{
-		*constant.NewServerConfig("nacos-test.shwoody.com", 8848, constant.WithContextPath("/nacos")),
+		*constant.NewServerConfig("nacos-test.com", 8848, constant.WithContextPath("/nacos")),
 	}
 	cc := constant.ClientConfig{
 		NamespaceId: "dev",

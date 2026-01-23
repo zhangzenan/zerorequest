@@ -16,7 +16,7 @@ import (
 func main() {
 	//配置Nacos服务端
 	sc := []constant.ServerConfig{
-		*constant.NewServerConfig("nacos-test.shwoody.com", 8848, constant.WithContextPath("/nacos")),
+		*constant.NewServerConfig("nacos-test.com", 8848, constant.WithContextPath("/nacos")),
 	}
 
 	//配置Nacos客户端
