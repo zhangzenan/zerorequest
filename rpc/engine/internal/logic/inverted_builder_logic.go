@@ -9,6 +9,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"unsafe"
 	"zerorequest/pkg"
 
 	"zerorequest/rpc/engine/internal/common/model"
@@ -85,13 +86,12 @@ func buildInverted(csvFile, outFile string) error {
 
 	// 使用带缓冲的写入器
 	writer := bufio.NewWriterSize(f, 1024*1024)
-	defer writer.Flush()
 
 	//写Header
 	header := model.InvertedHeader{
 		Magic:    0x12345678,
 		Version:  1,
-		KeyCount: uint32(len(keys)),
+		KeyCount: uint32(0), // 初始为 0
 	}
 	binary.Write(writer, binary.LittleEndian, header)
 	writer.Flush() // 立即刷新 header 数据到文件
@@ -106,10 +106,12 @@ func buildInverted(csvFile, outFile string) error {
 
 	//写PostingLists
 	// 在写入前计算预计的文件位置
-	pos := int64(binary.Size(header)) + int64(len(keys)*12) // header大小 + keyIndex区域大小
+	//pos := int64(binary.Size(header)) + int64(len(keys)*12) // header大小 + keyIndex区域大小
 
 	for i, k := range keys {
-		indexPos[i] = pos
+		// 在当前位置写入，而不是使用pos跟踪
+		offset, _ := f.Seek(0, io.SeekCurrent) // 获取当前实际位置
+		indexPos[i] = offset
 		//写PostingList
 		cnt := uint32(len(m[k]))
 		// 手动编码长度
@@ -125,7 +127,7 @@ func buildInverted(csvFile, outFile string) error {
 		}
 		writer.Write(idBytes)
 
-		pos += int64(4 + len(m[k])*4) // 更新预计位置：长度(4字节) + ID数量*
+		//pos += int64(4 + len(m[k])*4) // 更新预计位置：长度(4字节) + ID数量*
 	}
 	//回写keyIndex
 	f.Seek(int64(binary.Size(header)), io.SeekStart) //定位目标：跳转到文件头部之后的第一个字节位置
@@ -133,6 +135,13 @@ func buildInverted(csvFile, outFile string) error {
 		binary.Write(f, binary.LittleEndian, k)                   //写trigger
 		binary.Write(f, binary.LittleEndian, uint64(indexPos[i])) //写offset
 	}
+	writer.Flush()
+	// 在所有数据写入完成后，回写真实的 KeyCount
+	realKeyCount := uint32(len(keys))
+
+	// 移动到文件开头的 KeyCount 位置
+	f.Seek(int64(unsafe.Sizeof(uint32(0))*2), io.SeekStart) // 跳过 Magic 和 Version
+	binary.Write(f, binary.LittleEndian, realKeyCount)
 
 	return nil
 }
