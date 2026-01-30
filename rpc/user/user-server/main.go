@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"zerorequest/rpc/user/internal/config"
+	"zerorequest/pkg"
 	"zerorequest/rpc/user/internal/server"
 	"zerorequest/rpc/user/internal/svc"
 	user "zerorequest/rpc/user/proto/pb"
@@ -54,7 +54,7 @@ func main() {
 	fmt.Printf("gRPC服务已启动，端口为: %d\n", port)
 
 	s := grpc.NewServer()
-	var c config.Config
+	var c pkg.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
 	user.RegisterUserServiceServer(s, server.NewUserServiceServer(ctx))

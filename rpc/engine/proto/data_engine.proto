@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package engine;
+
+option go_package = "./pb";
+
+message DumpMsg{
+  string csv_path = 1;
+  string dump_path = 2;
+}
+
+message Response{
+  bool ok = 1;
+  string msg = 2;
+}
+
+message ForwardRequest{
+  uint64 product_id = 1;
+}
+
+message ForwardResponse{
+  uint64 product_id = 1;
+  uint32 status = 2;
+  uint32 category = 3;
+  uint32 stock = 4;
+  uint32 price = 5;
+  uint32 flags = 6;
+  string tags = 7;
+}
+
+message InvertedRequest{
+  uint32 product_id = 1;
+}
+
+message InvertedResponse{
+  repeated uint32 product_ids = 1;
+}
+
+service DataEngine{
+  rpc ForwardBuilder(DumpMsg) returns (Response);
+
+  rpc InvertedBuilder(DumpMsg) returns (Response);
+
+  rpc LoadForwardIndex(DumpMsg) returns (Response);
+
+  rpc LoadInvertedIndex(DumpMsg) returns (Response);
+
+  rpc GetForward(ForwardRequest) returns (ForwardResponse);
+
+  rpc GetInverted(InvertedRequest) returns (InvertedResponse);
+}

@@ -1,9 +1,8 @@
-package logx
+package pkg
 
 import (
 	"context"
 	"os"
-	"zerorequest/rpc/user/internal/config"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -19,7 +18,7 @@ type Logger struct {
 
 var globalLogger *Logger
 
-func InitLogger(config config.LogConf) {
+func InitLogger(config LogConf) {
 	//初始化日志逻辑
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   config.Filename,
