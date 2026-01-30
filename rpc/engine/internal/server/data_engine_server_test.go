@@ -53,12 +53,12 @@ func TestDataEngineServer_LoadInvertedIndex(t *testing.T) {
 	get_inverted_logic := logic.NewGetInvertedLogic(context.Background(), svcCtx)
 
 	invertedResponse, err := get_inverted_logic.GetInverted(&pb.InvertedRequest{
-		ProductId: 998,
+		ProductId: 9997,
 	})
 	if err != nil {
 		t.Errorf("GetInverted() error = %v", err)
 		return
 	}
-	fmt.Printf("GetInverted() response = %v", invertedResponse)
+	fmt.Printf("GetInverted() response = %v", len(invertedResponse.ProductIds))
 
 }

@@ -77,23 +77,23 @@ func discoverService() *model.Instance {
 
 func request(client pb.DataEngineClient, ctx context.Context) {
 
-	for i := 0; i < 1000; i++ {
+	for i := 0; i < 1; i++ {
 		var wg sync.WaitGroup
 
 		//每次启动50个并行请求
-		for i := 0; i < 50; i++ {
+		for i := 0; i < 5; i++ {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
 
-				productId := rand.Intn(1000) + 1
+				productId := rand.Intn(10000000) + 1
 				response, error := client.GetInverted(ctx, &pb.InvertedRequest{
 					ProductId: uint32(productId),
 				})
 				if error != nil {
 					fmt.Printf("%d 请求失败: %v", productId, error)
 				}
-				fmt.Printf("%d 请求结果: %v", productId, response)
+				fmt.Printf("%d 请求结果: %v", productId, response.ProductIds)
 			}()
 		}
 		wg.Wait() //等待当前批次的请求结束

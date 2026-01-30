@@ -30,7 +30,7 @@ func TestBuildInvertedCsv(t *testing.T) {
 	defer writer.Flush()
 
 	// 生成 1000 条测试数据
-	for i := 0; i < 10000000; i++ {
+	for i := 0; i < 10000; i++ {
 		triggerId := uint64(i + 1)
 
 		// 为每个triggerId生成2-5个相关商品ID
@@ -38,7 +38,7 @@ func TestBuildInvertedCsv(t *testing.T) {
 		relatedCount := rand.Intn(190) + 5 // 随机2-5个相关ID
 
 		for j := 0; j < relatedCount; j++ {
-			relatedId := triggerId*100 + uint64(j) // 生成相关的商品ID
+			relatedId := triggerId + uint64(j) // 生成相关的商品ID
 			relatedIds = append(relatedIds, fmt.Sprintf("%d", relatedId))
 		}
 
