@@ -30,7 +30,7 @@ func TestBuildInvertedCsv(t *testing.T) {
 	defer writer.Flush()
 
 	// 生成 1000 条测试数据
-	for i := 0; i < 1000000; i++ {
+	for i := 0; i < 10000000; i++ {
 		triggerId := uint64(i + 1)
 
 		// 为每个triggerId生成2-5个相关商品ID

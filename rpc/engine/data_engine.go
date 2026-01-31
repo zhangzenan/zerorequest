@@ -75,6 +75,7 @@ func main() {
 		log.Fatalf("加载索引失败: %v", err)
 		return
 	}
+	fmt.Println("索引加载成功")
 	pb.RegisterDataEngineServer(s, server.NewDataEngineServer(ctx))
 
 	//在goroutine中启动gRPC服务

@@ -86,7 +86,7 @@ func request(client pb.DataEngineClient, ctx context.Context) {
 			go func() {
 				defer wg.Done()
 
-				productId := rand.Intn(1000000) + 1
+				productId := rand.Intn(10000000)
 				//productId := 999997
 				response, error := client.GetInverted(ctx, &pb.InvertedRequest{
 					ProductId: uint32(productId),
@@ -100,6 +100,6 @@ func request(client pb.DataEngineClient, ctx context.Context) {
 		wg.Wait() //等待当前批次的请求结束
 		fmt.Println("---------------------------------------")
 
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
