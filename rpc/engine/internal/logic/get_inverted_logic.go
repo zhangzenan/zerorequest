@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 	"unsafe"
 	"zerorequest/rpc/engine/internal/common/factory"
 	"zerorequest/rpc/engine/internal/svc"
@@ -26,7 +27,15 @@ func NewGetInvertedLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetIn
 
 func (l *GetInvertedLogic) GetInverted(in *pb.InvertedRequest) (*pb.InvertedResponse, error) {
 	// todo: add your logic here and delete this line
+	startTime := time.Now()
 	postingListView, _ := GetPosting(in.ProductId)
+	duration := time.Since(startTime)
+	// 计算微秒和毫秒
+	durationMicroseconds := duration.Microseconds()
+	durationMilliseconds := duration.Seconds() * 1000
+
+	logx.Infof("GetPosting 耗时: %d 微秒, %.2f 毫秒", durationMicroseconds, durationMilliseconds)
+
 	return &pb.InvertedResponse{
 		ProductIds: postingListView.IDs,
 	}, nil

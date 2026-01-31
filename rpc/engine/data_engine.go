@@ -1,13 +1,15 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
 	"net"
+	"zerorequest/rpc/engine/internal/logic"
 	"zerorequest/rpc/engine/internal/server"
 	"zerorequest/rpc/engine/internal/svc"
-	engine "zerorequest/rpc/engine/proto/pb"
+	"zerorequest/rpc/engine/proto/pb"
 
 	"zerorequest/pkg"
 
@@ -20,6 +22,7 @@ import (
 )
 
 var configFile = flag.String("f", "etc/data_engine.yaml", "the config file")
+var invertedDumpPath = "/Users/zhangzenan/Documents/data/inverted/inverted.dump"
 
 func main() {
 	flag.Parse()
@@ -66,7 +69,13 @@ func main() {
 	s := grpc.NewServer()
 
 	ctx := svc.NewServiceContext(c)
-	engine.RegisterDataEngineServer(s, server.NewDataEngineServer(ctx))
+	load_index_logic := logic.NewLoadInvertedIndexLogic(context.Background(), ctx)
+	_, err = load_index_logic.LoadInvertedIndex(&pb.DumpMsg{DumpPath: invertedDumpPath})
+	if err != nil {
+		log.Fatalf("加载索引失败: %v", err)
+		return
+	}
+	pb.RegisterDataEngineServer(s, server.NewDataEngineServer(ctx))
 
 	//在goroutine中启动gRPC服务
 	go func() {
