@@ -15,8 +15,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var invertedCsvPath = "D:\\data\\inverted\\inverted.csv"
-var invertedDumpPath = "D:\\data\\inverted\\inverted.dump"
+var invertedCsvPath = "/Users/zhangzenan/Documents/data/inverted/inverted.csv"
+var invertedDumpPath = "/Users/zhangzenan/Documents/data/inverted/inverted.dump"
 
 func TestBuildInvertedCsv(t *testing.T) {
 	// 创建测试CSV文件
@@ -30,12 +30,12 @@ func TestBuildInvertedCsv(t *testing.T) {
 	defer writer.Flush()
 
 	// 生成 1000 条测试数据
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 1000000; i++ {
 		triggerId := uint64(i + 1)
 
 		// 为每个triggerId生成2-5个相关商品ID
-		relatedIds := make([]string, 0, 5)
-		relatedCount := rand.Intn(190) + 5 // 随机2-5个相关ID
+		relatedIds := make([]string, 0, 200)
+		relatedCount := rand.Intn(5) + 190 // 随机2-5个相关ID
 
 		for j := 0; j < relatedCount; j++ {
 			relatedId := triggerId + uint64(j) // 生成相关的商品ID

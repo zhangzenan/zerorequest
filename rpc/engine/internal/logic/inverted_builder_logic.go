@@ -127,6 +127,8 @@ func buildInverted(csvFile, outFile string) error {
 		}
 		writer.Write(idBytes)
 
+		// 关键：强制刷新缓冲区到文件
+		writer.Flush()
 		//pos += int64(4 + len(m[k])*4) // 更新预计位置：长度(4字节) + ID数量*
 	}
 	//回写keyIndex

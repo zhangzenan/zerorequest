@@ -3,6 +3,7 @@ module zerorequest
 go 1.25.4
 
 require (
+	github.com/edsrzf/mmap-go v1.2.0
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/nacos-group/nacos-sdk-go/v2 v2.3.5
 	github.com/stretchr/testify v1.11.1
@@ -48,7 +49,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deckarep/golang-set v1.7.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/edsrzf/mmap-go v1.2.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.11.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect

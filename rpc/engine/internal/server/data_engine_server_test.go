@@ -10,8 +10,8 @@ import (
 	"zerorequest/rpc/engine/proto/pb"
 )
 
-var dumpPath = "D:\\data\\forward\\forward.dump"
-var invertedDumpPath = "D:\\data\\inverted\\inverted.dump"
+var dumpPath = "/Users/zhangzenan/Documents/data/inverted/forward.dump"
+var invertedDumpPath = "/Users/zhangzenan/Documents/data/inverted/inverted.dump"
 
 func TestDataEngineServer_LoadForwardIndex(t *testing.T) {
 	// 创建 mock 服务上下文
@@ -53,7 +53,7 @@ func TestDataEngineServer_LoadInvertedIndex(t *testing.T) {
 	get_inverted_logic := logic.NewGetInvertedLogic(context.Background(), svcCtx)
 
 	invertedResponse, err := get_inverted_logic.GetInverted(&pb.InvertedRequest{
-		ProductId: 9997,
+		ProductId: 999997,
 	})
 	if err != nil {
 		t.Errorf("GetInverted() error = %v", err)

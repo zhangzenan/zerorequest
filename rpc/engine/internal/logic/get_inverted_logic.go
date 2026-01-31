@@ -48,6 +48,11 @@ func GetPosting(trigger uint32) (PostingListView, bool) {
 		return PostingListView{}, false
 	}
 	// 使用 unsafe.Pointer 进行指针运算
+	/**
+	idx.Data[off]：获取数据数组中偏移量 off 位置的单个字节
+	&idx.Data[off]：获取该字节的内存地址（*byte 类型）
+	unsafe.Pointer(...)：将 *byte 类型转换为通用指针类型 unsafe.Pointer
+	*/
 	cntPtr := unsafe.Pointer(&idx.Data[off])
 
 	//cnt
