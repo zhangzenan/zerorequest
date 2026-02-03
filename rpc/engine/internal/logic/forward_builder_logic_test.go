@@ -57,14 +57,14 @@ func TestGenerateProductCSV(t *testing.T) {
 	tagsList := []string{"electronics", "clothing", "home", "sports", "books", "toys", "beauty", "health"}
 
 	// 生成商品数据
-	numProducts := 1000
+	numProducts := 10000000
 	for i := 1; i <= numProducts; i++ {
 		product := map[string]string{
 			"product_id":  strconv.Itoa(i),
 			"status":      strconv.Itoa(rand.Intn(2)),              // 随机选择 0 或 1
 			"category_id": strconv.Itoa(rand.Intn(20) + 1),         // 随机数 1-20
 			"stock":       strconv.Itoa(rand.Intn(1001)),           // 随机数 0-1000
-			"price":       strconv.Itoa(rand.Intn(9999) + 1),       // 随机数 1-10000
+			"price":       strconv.Itoa(rand.Intn(1000) + 1),       // 随机数 1-10000
 			"flags":       strconv.Itoa([]int{0, 3}[rand.Intn(2)]), // 随机选择 0 或 3
 			"tags":        getRandomTags(tagsList),                 // 随机生成标签
 		}

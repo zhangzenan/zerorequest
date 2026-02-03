@@ -21,8 +21,11 @@ import (
 	"google.golang.org/grpc"
 )
 
+//import _ "net/http/pprof"
+
 var configFile = flag.String("f", "etc/data_engine.yaml", "the config file")
-var invertedDumpPath = "/Users/zhangzenan/Documents/data/inverted/inverted.dump"
+var invertedDumpPath = "D:/data/inverted/inverted.dump"
+var forwardDumpPath = "D:/data/forward/forward.dump"
 
 func main() {
 	flag.Parse()
@@ -69,6 +72,8 @@ func main() {
 	s := grpc.NewServer()
 
 	ctx := svc.NewServiceContext(c)
+	load_forward_logic := logic.NewLoadForwardIndexLogic(context.Background(), ctx)
+	load_forward_logic.LoadForwardIndex(&pb.DumpMsg{DumpPath: forwardDumpPath})
 	load_index_logic := logic.NewLoadInvertedIndexLogic(context.Background(), ctx)
 	_, err = load_index_logic.LoadInvertedIndex(&pb.DumpMsg{DumpPath: invertedDumpPath})
 	if err != nil {
@@ -84,6 +89,10 @@ func main() {
 			log.Fatalf("启动gRPC服务失败: %v", err)
 		}
 	}()
+	//Go 服务中开启 pprof
+	/*go func() {
+		http.ListenAndServe("0.0.0.0:6060", nil)
+	}()*/
 
 	//向Nacos注册服务
 	success, err := namingClient.RegisterInstance(vo.RegisterInstanceParam{

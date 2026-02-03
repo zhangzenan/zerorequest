@@ -77,29 +77,60 @@ func discoverService() *model.Instance {
 
 func request(client pb.DataEngineClient, ctx context.Context) {
 
+	filter := buildFilter()
 	for i := 0; i < 10000000; i++ {
 		var wg sync.WaitGroup
 
 		//每次启动50个并行请求
-		for i := 0; i < 100; i++ {
+		for i := 0; i < 20; i++ {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
 
-				productId := rand.Intn(10000000)
-				//productId := 999997
+				// 生成200个1到1000之间的随机数切片
+				productIds := generateRandomProductIds(200, 1, 10000000)
 				response, error := client.GetInverted(ctx, &pb.InvertedRequest{
-					ProductId: uint32(productId),
+					ProductIds: productIds,
+					Filter:     filter,
+					Limit:      50,
 				})
 				if error != nil {
-					fmt.Printf("%d 请求失败: %v", productId, error)
+					fmt.Printf("请求失败: %v", error)
 				}
-				fmt.Printf("%d 请求结果length: %v\n", productId, len(response.ProductIds))
+				if rand.Float64() < 0.1 {
+					fmt.Printf("index:%d 请求结果length: %v\n", i, len(response.Results))
+				}
 			}()
 		}
 		wg.Wait() //等待当前批次的请求结束
-		fmt.Println("---------------------------------------")
 
 		time.Sleep(500 * time.Millisecond)
 	}
+}
+
+// 生成指定数量的随机产品ID
+func generateRandomProductIds(count, min, max int) []uint32 {
+	productIds := make([]uint32, count)
+	for i := 0; i < count; i++ {
+		productIds[i] = uint32(rand.Intn(max-min+1) + min)
+	}
+	return productIds
+}
+
+func buildFilter() *pb.Filter {
+	filter := &pb.Filter{
+		Conditions: []*pb.Condition{
+			{
+				Field:  "status",
+				Op:     pb.Operation_OpEq,
+				Values: []uint64{1},
+			},
+			{
+				Field:  "price",
+				Op:     pb.Operation_OpRange,
+				Values: []uint64{20, 1000},
+			},
+		},
+	}
+	return filter
 }

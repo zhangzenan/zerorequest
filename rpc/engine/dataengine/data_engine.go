@@ -14,9 +14,13 @@ import (
 )
 
 type (
+	Condition        = pb.Condition
 	DumpMsg          = pb.DumpMsg
+	Filter           = pb.Filter
 	ForwardRequest   = pb.ForwardRequest
 	ForwardResponse  = pb.ForwardResponse
+	ForwardView      = pb.ForwardView
+	ForwardViewList  = pb.ForwardViewList
 	InvertedRequest  = pb.InvertedRequest
 	InvertedResponse = pb.InvertedResponse
 	Response         = pb.Response

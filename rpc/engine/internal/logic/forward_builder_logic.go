@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"bufio"
 	"context"
 	"encoding/binary"
 	"encoding/csv"
@@ -45,7 +46,7 @@ type ForwardHeader struct {
 }
 
 type ForwardRecord struct {
-	ProductID uint64
+	ProductID uint32
 	Status    uint8
 	Category  uint32
 	Stock     uint32
@@ -87,6 +88,8 @@ func buildForward(csvFile, outFile string) error {
 	}
 
 	var count uint32
+	// 使用带缓冲的写入器
+	writer := bufio.NewWriterSize(f, 1024*1024)
 
 	for {
 		row, err := reader.Read()
@@ -95,7 +98,7 @@ func buildForward(csvFile, outFile string) error {
 		}
 
 		rec := ForwardRecord{
-			ProductID: pkg.ParseU64(row[0]),
+			ProductID: pkg.ParseU32(row[0]),
 			Status:    pkg.ParseU8(row[1]),
 			Category:  pkg.ParseU32(row[2]),
 			Stock:     pkg.ParseU32(row[3]),
@@ -104,16 +107,18 @@ func buildForward(csvFile, outFile string) error {
 			Tags:      []byte(row[6]),
 		}
 		// 写 fixed
-		binary.Write(f, binary.LittleEndian, rec.ProductID)
-		binary.Write(f, binary.LittleEndian, rec.Status)
-		binary.Write(f, binary.LittleEndian, rec.Category)
-		binary.Write(f, binary.LittleEndian, rec.Stock)
-		binary.Write(f, binary.LittleEndian, rec.Price)
-		binary.Write(f, binary.LittleEndian, rec.Flags)
+		binary.Write(writer, binary.LittleEndian, rec.ProductID)
+		binary.Write(writer, binary.LittleEndian, rec.Status)
+		binary.Write(writer, binary.LittleEndian, rec.Category)
+		binary.Write(writer, binary.LittleEndian, rec.Stock)
+		binary.Write(writer, binary.LittleEndian, rec.Price)
+		binary.Write(writer, binary.LittleEndian, rec.Flags)
 		// 写变长
 		tagsLen := uint16(len(rec.Tags))
-		binary.Write(f, binary.LittleEndian, tagsLen)
-		f.Write(rec.Tags)
+		binary.Write(writer, binary.LittleEndian, tagsLen)
+		writer.Write(rec.Tags)
+
+		writer.Flush()
 
 		count++
 	}

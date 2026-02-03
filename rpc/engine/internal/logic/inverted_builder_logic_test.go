@@ -15,8 +15,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var invertedCsvPath = "/Users/zhangzenan/Documents/data/inverted/inverted.csv"
-var invertedDumpPath = "/Users/zhangzenan/Documents/data/inverted/inverted.dump"
+var invertedCsvPath = "/data/inverted/inverted.csv"
+var invertedDumpPath = "/data/inverted/inverted.dump"
 
 func TestBuildInvertedCsv(t *testing.T) {
 	// 创建测试CSV文件

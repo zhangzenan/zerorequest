@@ -15,11 +15,12 @@ message Response{
 }
 
 message ForwardRequest{
-  uint64 product_id = 1;
+  uint32 product_id = 1;
+  Filter filter = 2;
 }
 
-message ForwardResponse{
-  uint64 product_id = 1;
+message ForwardView{
+  uint32 product_id = 1;
   uint32 status = 2;
   uint32 category = 3;
   uint32 stock = 4;
@@ -28,12 +29,38 @@ message ForwardResponse{
   string tags = 7;
 }
 
-message InvertedRequest{
-  uint32 product_id = 1;
+message ForwardResponse{
+  ForwardView data = 1;
 }
 
-message InvertedResponse{
+message InvertedRequest{
   repeated uint32 product_ids = 1;
+  Filter filter = 2;
+  uint32 limit = 3;//每个trigger限制多少个
+}
+message ForwardViewList {
+  repeated ForwardView data = 1;
+}
+message InvertedResponse{
+  map<uint32, ForwardViewList> results = 1;
+}
+
+enum Operation{
+  OpEq = 0;
+  OpNotEq = 1;
+  OpIn = 2;
+  OpNotIn = 3;
+  OpRange = 4;
+}
+
+message Condition{
+  string field = 1;
+  Operation op = 2;
+  repeated uint64 values = 3;
+}
+
+message Filter{
+  repeated Condition conditions = 1;
 }
 
 service DataEngine{

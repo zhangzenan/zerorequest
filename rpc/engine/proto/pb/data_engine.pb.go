@@ -21,6 +21,61 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Operation int32
+
+const (
+	Operation_OpEq    Operation = 0
+	Operation_OpNotEq Operation = 1
+	Operation_OpIn    Operation = 2
+	Operation_OpNotIn Operation = 3
+	Operation_OpRange Operation = 4
+)
+
+// Enum value maps for Operation.
+var (
+	Operation_name = map[int32]string{
+		0: "OpEq",
+		1: "OpNotEq",
+		2: "OpIn",
+		3: "OpNotIn",
+		4: "OpRange",
+	}
+	Operation_value = map[string]int32{
+		"OpEq":    0,
+		"OpNotEq": 1,
+		"OpIn":    2,
+		"OpNotIn": 3,
+		"OpRange": 4,
+	}
+)
+
+func (x Operation) Enum() *Operation {
+	p := new(Operation)
+	*p = x
+	return p
+}
+
+func (x Operation) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Operation) Descriptor() protoreflect.EnumDescriptor {
+	return file_proto_data_engine_proto_enumTypes[0].Descriptor()
+}
+
+func (Operation) Type() protoreflect.EnumType {
+	return &file_proto_data_engine_proto_enumTypes[0]
+}
+
+func (x Operation) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Operation.Descriptor instead.
+func (Operation) EnumDescriptor() ([]byte, []int) {
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{0}
+}
+
 type DumpMsg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CsvPath       string                 `protobuf:"bytes,1,opt,name=csv_path,json=csvPath,proto3" json:"csv_path,omitempty"`
@@ -127,7 +182,8 @@ func (x *Response) GetMsg() string {
 
 type ForwardRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     uint64                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	ProductId     uint32                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	Filter        *Filter                `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -162,16 +218,23 @@ func (*ForwardRequest) Descriptor() ([]byte, []int) {
 	return file_proto_data_engine_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ForwardRequest) GetProductId() uint64 {
+func (x *ForwardRequest) GetProductId() uint32 {
 	if x != nil {
 		return x.ProductId
 	}
 	return 0
 }
 
-type ForwardResponse struct {
+func (x *ForwardRequest) GetFilter() *Filter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+type ForwardView struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     uint64                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	ProductId     uint32                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Status        uint32                 `protobuf:"varint,2,opt,name=status,proto3" json:"status,omitempty"`
 	Category      uint32                 `protobuf:"varint,3,opt,name=category,proto3" json:"category,omitempty"`
 	Stock         uint32                 `protobuf:"varint,4,opt,name=stock,proto3" json:"stock,omitempty"`
@@ -182,9 +245,95 @@ type ForwardResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *ForwardView) Reset() {
+	*x = ForwardView{}
+	mi := &file_proto_data_engine_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ForwardView) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ForwardView) ProtoMessage() {}
+
+func (x *ForwardView) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_data_engine_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ForwardView.ProtoReflect.Descriptor instead.
+func (*ForwardView) Descriptor() ([]byte, []int) {
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ForwardView) GetProductId() uint32 {
+	if x != nil {
+		return x.ProductId
+	}
+	return 0
+}
+
+func (x *ForwardView) GetStatus() uint32 {
+	if x != nil {
+		return x.Status
+	}
+	return 0
+}
+
+func (x *ForwardView) GetCategory() uint32 {
+	if x != nil {
+		return x.Category
+	}
+	return 0
+}
+
+func (x *ForwardView) GetStock() uint32 {
+	if x != nil {
+		return x.Stock
+	}
+	return 0
+}
+
+func (x *ForwardView) GetPrice() uint32 {
+	if x != nil {
+		return x.Price
+	}
+	return 0
+}
+
+func (x *ForwardView) GetFlags() uint32 {
+	if x != nil {
+		return x.Flags
+	}
+	return 0
+}
+
+func (x *ForwardView) GetTags() string {
+	if x != nil {
+		return x.Tags
+	}
+	return ""
+}
+
+type ForwardResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          *ForwardView           `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
 func (x *ForwardResponse) Reset() {
 	*x = ForwardResponse{}
-	mi := &file_proto_data_engine_proto_msgTypes[3]
+	mi := &file_proto_data_engine_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -196,7 +345,7 @@ func (x *ForwardResponse) String() string {
 func (*ForwardResponse) ProtoMessage() {}
 
 func (x *ForwardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_data_engine_proto_msgTypes[3]
+	mi := &file_proto_data_engine_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -209,68 +358,28 @@ func (x *ForwardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ForwardResponse.ProtoReflect.Descriptor instead.
 func (*ForwardResponse) Descriptor() ([]byte, []int) {
-	return file_proto_data_engine_proto_rawDescGZIP(), []int{3}
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ForwardResponse) GetProductId() uint64 {
+func (x *ForwardResponse) GetData() *ForwardView {
 	if x != nil {
-		return x.ProductId
+		return x.Data
 	}
-	return 0
-}
-
-func (x *ForwardResponse) GetStatus() uint32 {
-	if x != nil {
-		return x.Status
-	}
-	return 0
-}
-
-func (x *ForwardResponse) GetCategory() uint32 {
-	if x != nil {
-		return x.Category
-	}
-	return 0
-}
-
-func (x *ForwardResponse) GetStock() uint32 {
-	if x != nil {
-		return x.Stock
-	}
-	return 0
-}
-
-func (x *ForwardResponse) GetPrice() uint32 {
-	if x != nil {
-		return x.Price
-	}
-	return 0
-}
-
-func (x *ForwardResponse) GetFlags() uint32 {
-	if x != nil {
-		return x.Flags
-	}
-	return 0
-}
-
-func (x *ForwardResponse) GetTags() string {
-	if x != nil {
-		return x.Tags
-	}
-	return ""
+	return nil
 }
 
 type InvertedRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     uint32                 `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	ProductIds    []uint32               `protobuf:"varint,1,rep,packed,name=product_ids,json=productIds,proto3" json:"product_ids,omitempty"`
+	Filter        *Filter                `protobuf:"bytes,2,opt,name=filter,proto3" json:"filter,omitempty"`
+	Limit         uint32                 `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"` //每个trigger限制多少个
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *InvertedRequest) Reset() {
 	*x = InvertedRequest{}
-	mi := &file_proto_data_engine_proto_msgTypes[4]
+	mi := &file_proto_data_engine_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -282,7 +391,7 @@ func (x *InvertedRequest) String() string {
 func (*InvertedRequest) ProtoMessage() {}
 
 func (x *InvertedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_data_engine_proto_msgTypes[4]
+	mi := &file_proto_data_engine_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -295,26 +404,84 @@ func (x *InvertedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InvertedRequest.ProtoReflect.Descriptor instead.
 func (*InvertedRequest) Descriptor() ([]byte, []int) {
-	return file_proto_data_engine_proto_rawDescGZIP(), []int{4}
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *InvertedRequest) GetProductId() uint32 {
+func (x *InvertedRequest) GetProductIds() []uint32 {
 	if x != nil {
-		return x.ProductId
+		return x.ProductIds
+	}
+	return nil
+}
+
+func (x *InvertedRequest) GetFilter() *Filter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+func (x *InvertedRequest) GetLimit() uint32 {
+	if x != nil {
+		return x.Limit
 	}
 	return 0
 }
 
-type InvertedResponse struct {
+type ForwardViewList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductIds    []uint32               `protobuf:"varint,1,rep,packed,name=product_ids,json=productIds,proto3" json:"product_ids,omitempty"`
+	Data          []*ForwardView         `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ForwardViewList) Reset() {
+	*x = ForwardViewList{}
+	mi := &file_proto_data_engine_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ForwardViewList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ForwardViewList) ProtoMessage() {}
+
+func (x *ForwardViewList) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_data_engine_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ForwardViewList.ProtoReflect.Descriptor instead.
+func (*ForwardViewList) Descriptor() ([]byte, []int) {
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ForwardViewList) GetData() []*ForwardView {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type InvertedResponse struct {
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Results       map[uint32]*ForwardViewList `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty" protobuf_key:"varint,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *InvertedResponse) Reset() {
 	*x = InvertedResponse{}
-	mi := &file_proto_data_engine_proto_msgTypes[5]
+	mi := &file_proto_data_engine_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -326,7 +493,7 @@ func (x *InvertedResponse) String() string {
 func (*InvertedResponse) ProtoMessage() {}
 
 func (x *InvertedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_data_engine_proto_msgTypes[5]
+	mi := &file_proto_data_engine_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -339,12 +506,116 @@ func (x *InvertedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InvertedResponse.ProtoReflect.Descriptor instead.
 func (*InvertedResponse) Descriptor() ([]byte, []int) {
-	return file_proto_data_engine_proto_rawDescGZIP(), []int{5}
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *InvertedResponse) GetProductIds() []uint32 {
+func (x *InvertedResponse) GetResults() map[uint32]*ForwardViewList {
 	if x != nil {
-		return x.ProductIds
+		return x.Results
+	}
+	return nil
+}
+
+type Condition struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
+	Op            Operation              `protobuf:"varint,2,opt,name=op,proto3,enum=engine.Operation" json:"op,omitempty"`
+	Values        []uint64               `protobuf:"varint,3,rep,packed,name=values,proto3" json:"values,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Condition) Reset() {
+	*x = Condition{}
+	mi := &file_proto_data_engine_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Condition) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Condition) ProtoMessage() {}
+
+func (x *Condition) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_data_engine_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Condition.ProtoReflect.Descriptor instead.
+func (*Condition) Descriptor() ([]byte, []int) {
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Condition) GetField() string {
+	if x != nil {
+		return x.Field
+	}
+	return ""
+}
+
+func (x *Condition) GetOp() Operation {
+	if x != nil {
+		return x.Op
+	}
+	return Operation_OpEq
+}
+
+func (x *Condition) GetValues() []uint64 {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
+type Filter struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Conditions    []*Condition           `protobuf:"bytes,1,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Filter) Reset() {
+	*x = Filter{}
+	mi := &file_proto_data_engine_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Filter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Filter) ProtoMessage() {}
+
+func (x *Filter) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_data_engine_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Filter.ProtoReflect.Descriptor instead.
+func (*Filter) Descriptor() ([]byte, []int) {
+	return file_proto_data_engine_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *Filter) GetConditions() []*Condition {
+	if x != nil {
+		return x.Conditions
 	}
 	return nil
 }
@@ -359,25 +630,48 @@ const file_proto_data_engine_proto_rawDesc = "" +
 	"\tdump_path\x18\x02 \x01(\tR\bdumpPath\",\n" +
 	"\bResponse\x12\x0e\n" +
 	"\x02ok\x18\x01 \x01(\bR\x02ok\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"/\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"W\n" +
 	"\x0eForwardRequest\x12\x1d\n" +
 	"\n" +
-	"product_id\x18\x01 \x01(\x04R\tproductId\"\xba\x01\n" +
-	"\x0fForwardResponse\x12\x1d\n" +
+	"product_id\x18\x01 \x01(\rR\tproductId\x12&\n" +
+	"\x06filter\x18\x02 \x01(\v2\x0e.engine.FilterR\x06filter\"\xb6\x01\n" +
+	"\vForwardView\x12\x1d\n" +
 	"\n" +
-	"product_id\x18\x01 \x01(\x04R\tproductId\x12\x16\n" +
+	"product_id\x18\x01 \x01(\rR\tproductId\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\rR\x06status\x12\x1a\n" +
 	"\bcategory\x18\x03 \x01(\rR\bcategory\x12\x14\n" +
 	"\x05stock\x18\x04 \x01(\rR\x05stock\x12\x14\n" +
 	"\x05price\x18\x05 \x01(\rR\x05price\x12\x14\n" +
 	"\x05flags\x18\x06 \x01(\rR\x05flags\x12\x12\n" +
-	"\x04tags\x18\a \x01(\tR\x04tags\"0\n" +
-	"\x0fInvertedRequest\x12\x1d\n" +
-	"\n" +
-	"product_id\x18\x01 \x01(\rR\tproductId\"3\n" +
-	"\x10InvertedResponse\x12\x1f\n" +
+	"\x04tags\x18\a \x01(\tR\x04tags\":\n" +
+	"\x0fForwardResponse\x12'\n" +
+	"\x04data\x18\x01 \x01(\v2\x13.engine.ForwardViewR\x04data\"p\n" +
+	"\x0fInvertedRequest\x12\x1f\n" +
 	"\vproduct_ids\x18\x01 \x03(\rR\n" +
-	"productIds2\xe7\x02\n" +
+	"productIds\x12&\n" +
+	"\x06filter\x18\x02 \x01(\v2\x0e.engine.FilterR\x06filter\x12\x14\n" +
+	"\x05limit\x18\x03 \x01(\rR\x05limit\":\n" +
+	"\x0fForwardViewList\x12'\n" +
+	"\x04data\x18\x01 \x03(\v2\x13.engine.ForwardViewR\x04data\"\xa8\x01\n" +
+	"\x10InvertedResponse\x12?\n" +
+	"\aresults\x18\x01 \x03(\v2%.engine.InvertedResponse.ResultsEntryR\aresults\x1aS\n" +
+	"\fResultsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\rR\x03key\x12-\n" +
+	"\x05value\x18\x02 \x01(\v2\x17.engine.ForwardViewListR\x05value:\x028\x01\"\\\n" +
+	"\tCondition\x12\x14\n" +
+	"\x05field\x18\x01 \x01(\tR\x05field\x12!\n" +
+	"\x02op\x18\x02 \x01(\x0e2\x11.engine.OperationR\x02op\x12\x16\n" +
+	"\x06values\x18\x03 \x03(\x04R\x06values\";\n" +
+	"\x06Filter\x121\n" +
+	"\n" +
+	"conditions\x18\x01 \x03(\v2\x11.engine.ConditionR\n" +
+	"conditions*F\n" +
+	"\tOperation\x12\b\n" +
+	"\x04OpEq\x10\x00\x12\v\n" +
+	"\aOpNotEq\x10\x01\x12\b\n" +
+	"\x04OpIn\x10\x02\x12\v\n" +
+	"\aOpNotIn\x10\x03\x12\v\n" +
+	"\aOpRange\x10\x042\xe7\x02\n" +
 	"\n" +
 	"DataEngine\x123\n" +
 	"\x0eForwardBuilder\x12\x0f.engine.DumpMsg\x1a\x10.engine.Response\x124\n" +
@@ -400,33 +694,48 @@ func file_proto_data_engine_proto_rawDescGZIP() []byte {
 	return file_proto_data_engine_proto_rawDescData
 }
 
-var file_proto_data_engine_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_proto_data_engine_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_proto_data_engine_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_proto_data_engine_proto_goTypes = []any{
-	(*DumpMsg)(nil),          // 0: engine.DumpMsg
-	(*Response)(nil),         // 1: engine.Response
-	(*ForwardRequest)(nil),   // 2: engine.ForwardRequest
-	(*ForwardResponse)(nil),  // 3: engine.ForwardResponse
-	(*InvertedRequest)(nil),  // 4: engine.InvertedRequest
-	(*InvertedResponse)(nil), // 5: engine.InvertedResponse
+	(Operation)(0),           // 0: engine.Operation
+	(*DumpMsg)(nil),          // 1: engine.DumpMsg
+	(*Response)(nil),         // 2: engine.Response
+	(*ForwardRequest)(nil),   // 3: engine.ForwardRequest
+	(*ForwardView)(nil),      // 4: engine.ForwardView
+	(*ForwardResponse)(nil),  // 5: engine.ForwardResponse
+	(*InvertedRequest)(nil),  // 6: engine.InvertedRequest
+	(*ForwardViewList)(nil),  // 7: engine.ForwardViewList
+	(*InvertedResponse)(nil), // 8: engine.InvertedResponse
+	(*Condition)(nil),        // 9: engine.Condition
+	(*Filter)(nil),           // 10: engine.Filter
+	nil,                      // 11: engine.InvertedResponse.ResultsEntry
 }
 var file_proto_data_engine_proto_depIdxs = []int32{
-	0, // 0: engine.DataEngine.ForwardBuilder:input_type -> engine.DumpMsg
-	0, // 1: engine.DataEngine.InvertedBuilder:input_type -> engine.DumpMsg
-	0, // 2: engine.DataEngine.LoadForwardIndex:input_type -> engine.DumpMsg
-	0, // 3: engine.DataEngine.LoadInvertedIndex:input_type -> engine.DumpMsg
-	2, // 4: engine.DataEngine.GetForward:input_type -> engine.ForwardRequest
-	4, // 5: engine.DataEngine.GetInverted:input_type -> engine.InvertedRequest
-	1, // 6: engine.DataEngine.ForwardBuilder:output_type -> engine.Response
-	1, // 7: engine.DataEngine.InvertedBuilder:output_type -> engine.Response
-	1, // 8: engine.DataEngine.LoadForwardIndex:output_type -> engine.Response
-	1, // 9: engine.DataEngine.LoadInvertedIndex:output_type -> engine.Response
-	3, // 10: engine.DataEngine.GetForward:output_type -> engine.ForwardResponse
-	5, // 11: engine.DataEngine.GetInverted:output_type -> engine.InvertedResponse
-	6, // [6:12] is the sub-list for method output_type
-	0, // [0:6] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	10, // 0: engine.ForwardRequest.filter:type_name -> engine.Filter
+	4,  // 1: engine.ForwardResponse.data:type_name -> engine.ForwardView
+	10, // 2: engine.InvertedRequest.filter:type_name -> engine.Filter
+	4,  // 3: engine.ForwardViewList.data:type_name -> engine.ForwardView
+	11, // 4: engine.InvertedResponse.results:type_name -> engine.InvertedResponse.ResultsEntry
+	0,  // 5: engine.Condition.op:type_name -> engine.Operation
+	9,  // 6: engine.Filter.conditions:type_name -> engine.Condition
+	7,  // 7: engine.InvertedResponse.ResultsEntry.value:type_name -> engine.ForwardViewList
+	1,  // 8: engine.DataEngine.ForwardBuilder:input_type -> engine.DumpMsg
+	1,  // 9: engine.DataEngine.InvertedBuilder:input_type -> engine.DumpMsg
+	1,  // 10: engine.DataEngine.LoadForwardIndex:input_type -> engine.DumpMsg
+	1,  // 11: engine.DataEngine.LoadInvertedIndex:input_type -> engine.DumpMsg
+	3,  // 12: engine.DataEngine.GetForward:input_type -> engine.ForwardRequest
+	6,  // 13: engine.DataEngine.GetInverted:input_type -> engine.InvertedRequest
+	2,  // 14: engine.DataEngine.ForwardBuilder:output_type -> engine.Response
+	2,  // 15: engine.DataEngine.InvertedBuilder:output_type -> engine.Response
+	2,  // 16: engine.DataEngine.LoadForwardIndex:output_type -> engine.Response
+	2,  // 17: engine.DataEngine.LoadInvertedIndex:output_type -> engine.Response
+	5,  // 18: engine.DataEngine.GetForward:output_type -> engine.ForwardResponse
+	8,  // 19: engine.DataEngine.GetInverted:output_type -> engine.InvertedResponse
+	14, // [14:20] is the sub-list for method output_type
+	8,  // [8:14] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_data_engine_proto_init() }
@@ -439,13 +748,14 @@ func file_proto_data_engine_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_data_engine_proto_rawDesc), len(file_proto_data_engine_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   6,
+			NumEnums:      1,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_proto_data_engine_proto_goTypes,
 		DependencyIndexes: file_proto_data_engine_proto_depIdxs,
+		EnumInfos:         file_proto_data_engine_proto_enumTypes,
 		MessageInfos:      file_proto_data_engine_proto_msgTypes,
 	}.Build()
 	File_proto_data_engine_proto = out.File

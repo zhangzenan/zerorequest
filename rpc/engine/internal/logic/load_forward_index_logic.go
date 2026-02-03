@@ -59,7 +59,7 @@ func LoadForwardIndex(path string) (*model.ForwardIndex, error) {
 
 	idx := &model.ForwardIndex{
 		Data:   mm,
-		Offset: make(map[uint64]uint64, 1024*1024),
+		Offset: make(map[uint32]uint64, 1024*1024),
 	}
 
 	if err := parseAndBuildIndex(idx); err != nil {
@@ -99,8 +99,8 @@ func parseAndBuildIndex(idx *model.ForwardIndex) error {
 	for i := uint32(0); i < count; i++ {
 		recOffset := uint64(pos)
 
-		productID := binary.LittleEndian.Uint64(buf[pos:])
-		pos += 8
+		productID := binary.LittleEndian.Uint32(buf[pos:])
+		pos += 4
 
 		// 跳过 fixed fields
 		pos += 1 // Status
